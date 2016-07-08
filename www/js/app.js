@@ -25,7 +25,7 @@ var app = angular.module('pawm', ['ionic'])
     register();
     var needToRegister = window.setInterval(function(){
         if (SystemInfo.freshRegistration == false) {
-          alert("Please, make sure you are connected. ");
+          alert("Please, make sure you are connected.");
           register();
         }
       },
@@ -56,8 +56,6 @@ app.factory('SystemInfo', function() {
 })
 .controller("basicView", ['$scope', 'SystemInfo', function($scope, SystemInfo) {
   $scope.SystemInfo = SystemInfo;
-  $scope.getDeviceToken = function() {return SystemInfo.deviceToken;}
-
   $scope.showToken = function() {alert(SystemInfo.deviceToken)}
 }])
 .directive('textarea', function() {
