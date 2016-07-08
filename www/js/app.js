@@ -4,14 +4,33 @@ var app = angular.module('pawm', ['ionic'])
 
 .run(['$ionicPlatform', 'SystemInfo', '$rootScope', function($ionicPlatform, SystemInfo, $rootScope) {
   $ionicPlatform.ready(function() {
-    var push = new Ionic.Push({
-      "debug": true
+
+    // Registration loop
+    var needToRegister = 0;
+    var register = function(){
+      SystemInfo.freshRegistration = false;
+      var push = new Ionic.Push({
+        "debug": false
+        });
+      
+      push.register(function(token){
+        SystemInfo.freshRegistration = true;
+        console.log("Device token:",token.token);
+        SystemInfo.deviceToken = token.token;
+        $rootScope.$apply(); // seem to be needed
+        // Stop trying to register
+        window.clearInterval(needToRegister);
       });
-
-    push.register(function(token) {
-      console.log("Device token:",token.token);
-    });
-
+    };
+    register();
+    var needToRegister = window.setInterval(function(){
+        if (SystemInfo.freshRegistration == false) {
+          alert("Please, make sure you are connected. ");
+          register();
+        }
+      },
+      10000);
+    // End of registration loop
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -28,3 +47,31 @@ var app = angular.module('pawm', ['ionic'])
     }
   });
 }]);
+
+app.factory('SystemInfo', function() {
+  var SystemInfo = {
+    deviceToken: '',
+  };
+  return SystemInfo;
+})
+.controller("basicView", ['$scope', 'SystemInfo', function($scope, SystemInfo) {
+  $scope.SystemInfo = SystemInfo;
+  $scope.getDeviceToken = function() {return SystemInfo.deviceToken;}
+
+  $scope.showToken = function() {alert(SystemInfo.deviceToken)}
+}])
+.directive('textarea', function() {
+  return {
+  restrict: 'E',
+  link: function(scope, element, attr){
+    var update = function(){
+      element.css("height", "auto");
+      var height = element[0].scrollHeight;
+      element.css("height", element[0].scrollHeight + "px");
+    };
+    scope.$watch(attr.ngModel, function(){
+      update();
+    });
+  }
+  };
+});
