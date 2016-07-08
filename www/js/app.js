@@ -2,35 +2,47 @@
 
 var app = angular.module('pawm', ['ionic'])
 
-.run(['$ionicPlatform', 'SystemInfo', '$rootScope', function($ionicPlatform, SystemInfo, $rootScope) {
+.run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', '$rootScope', function($ionicPlatform, $ionicPopup, SystemInfo, $rootScope) {
   $ionicPlatform.ready(function() {
 
-    // Registration loop
-    var needToRegister = 0;
     var register = function(){
-      SystemInfo.freshRegistration = false;
+      SystemInfo.registrationEnded = false;
       var push = new Ionic.Push({
         "debug": false
         });
-      
+
+      // Undocumented feature?
+      push.errorCallback = function(e) {
+        SystemInfo.registrationEnded = true;
+        if (e.message == "SERVICE_NOT_AVAILABLE") {
+          var errorPopup = $ionicPopup.show({
+            title: "Warning",
+            template: "Internet connection not available",
+            buttons: [
+              {
+                text: "Try later",
+                type: 'button-positive',
+                onTap: function(e) {
+                  ionic.Platform.exitApp();
+                }
+              }
+            ]
+          });
+          errorPopup.then(function(res){
+            ionic.Platform.exitApp();
+          });
+          return;
+        }
+        alert(e.message);
+      };
       push.register(function(token){
-        SystemInfo.freshRegistration = true;
+        SystemInfo.registrationEnded = true;
         console.log("Device token:",token.token);
         SystemInfo.deviceToken = token.token;
         $rootScope.$apply(); // seem to be needed
-        // Stop trying to register
-        window.clearInterval(needToRegister);
       });
     };
     register();
-    var needToRegister = window.setInterval(function(){
-        if (SystemInfo.freshRegistration == false) {
-          alert("Please, make sure you are connected.");
-          register();
-        }
-      },
-      10000);
-    // End of registration loop
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
