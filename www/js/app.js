@@ -13,6 +13,7 @@ var app = angular.module('pawm', ['ionic'])
 
       // Undocumented feature?
       push.errorCallback = function(e) {
+        // If the push registration fails, show a popup that exits the app
         SystemInfo.registrationEnded = true;
         if (e.message == "SERVICE_NOT_AVAILABLE") {
           var errorPopup = $ionicPopup.show({
@@ -33,11 +34,11 @@ var app = angular.module('pawm', ['ionic'])
           });
           return;
         }
+        // In other cases just show a classical error message
         alert(e.message);
       };
       push.register(function(token){
         SystemInfo.registrationEnded = true;
-        console.log("Device token:",token.token);
         SystemInfo.deviceToken = token.token;
         $rootScope.$apply(); // seem to be needed
       });
