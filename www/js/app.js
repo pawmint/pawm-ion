@@ -1,6 +1,6 @@
 // Ionic PAWM App
 
-var app = angular.module('pawm', ['ionic'])
+var app = angular.module('pawm', ['ionic', 'login_Ubismart'])
 
 .run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', '$rootScope', function($ionicPlatform, $ionicPopup, SystemInfo, $rootScope) {
   $ionicPlatform.ready(function() {
@@ -59,17 +59,41 @@ var app = angular.module('pawm', ['ionic'])
       StatusBar.styleDefault();
     }
   });
-}]);
+}])
 
-app.factory('SystemInfo', function() {
+// Service providing system informations
+.factory('SystemInfo', function() {
   var SystemInfo = {
     deviceToken: '',
   };
   return SystemInfo;
 })
-.controller("basicView", ['$scope', 'SystemInfo', function($scope, SystemInfo) {
+
+// The basic controller
+.controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
   $scope.showToken = function() {alert(SystemInfo.deviceToken)}
+  $scope.showLogin = function() {
+    var login = {username: 'username', password: 'password'}
+    $scope.login = login;
+    $ionicPopup.confirm({
+      title: 'Authenticate',
+      templateUrl: 'templates/login_form.html',
+      scope: $scope,
+      cancelText: 'Exit',
+      cancelType: 'button-assertive'
+    }).then(function(confirmation){
+      if (confirmation) {
+        AuthenticationService.login($scope.login.username, $scope.login.password, SystemInfo.deviceToken)
+        .then(function(res){
+          console.log(res);
+          $ionicPopup.alert({title: res.data});
+        });
+      } else {
+          ionic.Platform.exitApp();
+      };
+    });
+  };
 }])
 .directive('textarea', function() {
   return {

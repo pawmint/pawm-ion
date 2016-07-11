@@ -22,6 +22,7 @@
 
     <!-- your app's js -->
     <script src="js/app.js?ionicCachebuster=43161"></script>
+    <script src="js/login.js?ionicCachebuster=43161"></script>
   </head>
   <body ng-app="pawm">
 
@@ -29,17 +30,21 @@
       <ion-header-bar class="bar-stable">
         <h1 class="title">Ionic PAWM</h1>
       </ion-header-bar>
-      <ion-content>
-        <div class="list" ng-controller="basicView">
+      <ion-content ng-controller="basicView">
+        <div class="list">
           <label class="item item-input item-stacked-label">
-            <div class="input-label">DEVICE ID:</div>
+            <div class="input-label">Device ID:</div>
             <br>
             <textarea class="item item-input item-text-wrap" ng-readonly="true" ng-model="SystemInfo.deviceToken"></textarea>
           </label>
           <ion-spinner ng-if="!SystemInfo.registrationEnded"></ion-spinner>
-          <br><br>
-          <button class="button button-positive" onclick="ionic.Platform.exitApp()">EXIT</button>
-          <button class="button button-positive" ng-click="showToken()">TOKEN?</button>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+            <button class="button button-assertive" onclick="ionic.Platform.exitApp()">EXIT</button>
+            <button class="button button-positive" ng-click="showToken()">Token</button>
+            <button class="button button-balanced" ng-click="showLogin()">Login</button>
+          </div>
         </div>
       </ion-content>
     </ion-pane>
