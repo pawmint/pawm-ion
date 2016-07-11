@@ -36,7 +36,7 @@
             <br>
             <textarea class="item item-input item-text-wrap" ng-readonly="true" ng-model="SystemInfo.deviceToken"></textarea>
           </label>
-          <ion-spinner ng-hide="SystemInfo.registrationEnded"></ion-spinner>
+          <ion-spinner ng-if="!SystemInfo.registrationEnded"></ion-spinner>
           <br><br>
           <button class="button button-positive" onclick="ionic.Platform.exitApp()">EXIT</button>
           <button class="button button-positive" ng-click="showToken()">TOKEN?</button>
