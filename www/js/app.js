@@ -8,8 +8,15 @@ var app = angular.module('pawm', ['ionic'])
     var register = function(){
       SystemInfo.registrationEnded = false;
       var push = new Ionic.Push({
-        "debug": false
-        });
+        "debug": false,
+        "onNotification": function(notification) {
+          var payload = notification.payload;
+          confirm(payload.text);
+        }
+        // Following command shows an alert "Hello" if the app is in foreground:
+        // curl -X POST -H "Authorization: Bearer <ionic-app-id>" -H "Content-Type: application/json" -d '{"tokens": ["<device-id>"],"profile": "testing","notification": {"message": "Please, open the app.", "payload":{"text":"Hello"}} }' "https://api.ionic.io/push/notifications"
+
+      });
 
       // Undocumented feature?
       push.errorCallback = function(e) {
