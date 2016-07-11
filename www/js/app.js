@@ -23,18 +23,11 @@ var app = angular.module('pawm', ['ionic'])
         // If the push registration fails, show a popup that exits the app
         SystemInfo.registrationEnded = true;
         if (e.message == "SERVICE_NOT_AVAILABLE") {
-          var errorPopup = $ionicPopup.show({
+          var errorPopup = $ionicPopup.alert({
             title: "Warning",
-            template: "Internet connection not available",
-            buttons: [
-              {
-                text: "Try later",
-                type: 'button-positive',
-                onTap: function(e) {
-                  ionic.Platform.exitApp();
-                }
-              }
-            ]
+            template: "Internet connection not available.",
+            okText: "Try later",
+            okType: 'button-assertive',
           });
           errorPopup.then(function(res){
             ionic.Platform.exitApp();
