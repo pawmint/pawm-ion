@@ -78,6 +78,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart'])
 .controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
   $scope.showToken = function() {alert(SystemInfo.deviceToken)}
+  $scope.showAuthToken = function() {$ionicPopup.alert({title: "AuthToken", template: localStorage.authToken})}
   $scope.showLogin = function() {
     var login = {username: 'username', password: 'password'}
     $scope.login = login;
@@ -91,8 +92,10 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart'])
       if (confirmation) {
         AuthenticationService.login($scope.login.username, $scope.login.password, SystemInfo.deviceToken)
         .then(function(res){
+          // Save the token for further requests
+          localStorage.authToken = res.data.authToken;
           console.log(res);
-          $ionicPopup.alert({title: res.data});
+          $ionicPopup.alert({title: res.data.message});
         });
       } else {
           ionic.Platform.exitApp();
