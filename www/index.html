@@ -7,6 +7,11 @@
 
     <link href="lib/ionic/css/ionic.css?ionicCachebuster=43161" rel="stylesheet">
     <link href="css/style.css?ionicCachebuster=43161" rel="stylesheet">
+    <style>
+    huge-icon:before {
+      font-size: 200px
+    }
+    </style>
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -23,6 +28,7 @@
     <!-- your app's js -->
     <script src="js/app.js?ionicCachebuster=43161"></script>
     <script src="js/login.js?ionicCachebuster=43161"></script>
+    <script src="js/communicator.js?ionicCachebuster=43161"></script>
   </head>
   <body ng-app="pawm">
 
@@ -45,6 +51,11 @@
             <button class="button button-positive" ng-click="showToken()">Token</button>
             <button class="button button-energized" ng-click="showAuthToken()">AuthToken</button>
             <button class="button button-balanced" ng-click="showLogin()">Login</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+            <a class="button button-icon icon ion-happy-outline huge-icon" ng-click="sendEvent('happy')"></a>
           </div>
         </div>
       </ion-content>

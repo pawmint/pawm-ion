@@ -1,6 +1,6 @@
 // Ionic PAWM App
 
-var app = angular.module('pawm', ['ionic', 'login_Ubismart'])
+var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubismart'])
 
 .run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', '$rootScope', function($ionicPlatform, $ionicPopup, SystemInfo, $rootScope) {
   $ionicPlatform.ready(function() {
@@ -75,10 +75,15 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart'])
 })
 
 // The basic controller
-.controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, $ionicPopup) {
+.controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
   $scope.showToken = function() {alert(SystemInfo.deviceToken)}
   $scope.showAuthToken = function() {$ionicPopup.alert({title: "AuthToken", template: localStorage.authToken})}
+  $scope.sendEvent = function(type) {
+      CommunicatorService.event(type).then(function(res){
+        $ionicPopup.alert({title: res.data.message});
+      });
+  };
   $scope.showLogin = function() {
     var login = {username: 'username', password: 'password'}
     $scope.login = login;
