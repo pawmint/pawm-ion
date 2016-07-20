@@ -11,7 +11,13 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
         "debug": false,
         "onNotification": function(notification) {
           var payload = notification.payload;
-          $ionicPopup.alert({title: payload.text});
+          //$ionicPopup.alert({title: payload.text});
+          if (payload.type == 'suggest') {
+            // $apply is needed: in case of app in foreground
+            $rootScope.$apply(function(){
+              SystemInfo.status = 'suggest';
+            });
+          }
         },
         "pluginConfig": {
           "android": {
@@ -84,6 +90,14 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
         $ionicPopup.alert({title: res.data.message});
       });
   };
+  // Suggestions form (open on notification arriving)
+  $scope.suggest = function() {SystemInfo.status='suggest'};
+
+  // Show UbiSMART interface view of My Services
+  $scope.ubiStart = function() {
+    // TODO: Verify the localStorage.authToken is VALID!
+    SystemInfo.status='ubismart';
+  };
   $scope.showLogin = function() {
     var login = {username: 'username', password: 'password'}
     $scope.login = login;
@@ -122,4 +136,32 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     });
   }
   };
-});
+})
+.controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
+  $scope.SystemInfo = SystemInfo;
+  $scope.suggestions = [
+    {text: "SAC?"},
+    {text: "Go for a walk?"},
+    {text: "Cook?"},
+    {text: "Drink some water?"},
+    {text: "Nothing"},
+    ];
+}])
+.controller("UbiWebController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$window', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $window) {
+  $scope.SystemInfo = SystemInfo;
+  if (!$scope.SystemInfo.authToken) $scope.SystemInfo.authToken = localStorage.authToken;
+
+  $scope.openInExternalBrowser = function() {
+    // Open in external browser
+    window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
+  };
+
+  $scope.authUbiWeb = function() {
+    // Open in inAppBroser
+    var w = $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken), 'theUbiSmartWindow');
+    console.log(w);
+  };
+
+}])
+
+;

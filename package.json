@@ -27,7 +27,8 @@
       },
       "locator": "phonegap-plugin-push",
       "id": "phonegap-plugin-push"
-    }
+    },
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
     "android",
