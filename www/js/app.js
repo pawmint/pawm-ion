@@ -163,5 +163,4 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
   };
 
 }])
-
 ;
