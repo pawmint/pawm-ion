@@ -8,8 +8,9 @@
     <link href="lib/ionic/css/ionic.css?ionicCachebuster=43161" rel="stylesheet">
     <link href="css/style.css?ionicCachebuster=43161" rel="stylesheet">
     <style>
-    huge-icon:before {
-      font-size: 200px
+    .huge-icon:before, .huge-icon {
+      font-size: 200px !important;
+      line-height: 200px !important;
     }
     </style>
 
@@ -36,7 +37,7 @@
       <ion-header-bar class="bar-stable">
         <h1 class="title">Ionic PAWM</h1>
       </ion-header-bar>
-      <ion-content ng-controller="basicView">
+      <ion-content ng-controller="basicView" ng-show="SystemInfo.status!='suggest'">
         <div class="list">
           <label class="item item-input item-stacked-label">
             <div class="input-label">Device ID:</div>
@@ -51,6 +52,7 @@
             <button class="button button-positive" ng-click="showToken()">Token</button>
             <button class="button button-energized" ng-click="showAuthToken()">AuthToken</button>
             <button class="button button-balanced" ng-click="showLogin()">Login</button>
+            <button class="button button-royal" ng-click="suggest()">Suggest</button>
           </div>
         </div>
         <div class="row">
@@ -58,6 +60,12 @@
             <a class="button button-icon icon ion-happy-outline huge-icon" ng-click="sendEvent('happy')"></a>
           </div>
         </div>
+      </ion-content>
+      <ion-content ng-controller="suggestController" ng-show="SystemInfo.status=='suggest'">
+        <button class="button button-royal" ng-click="SystemInfo.status=undefined">
+          &lt; Back</button>
+
+        <ng-include src="'templates/suggestion_form.html'"></ng-include>
       </ion-content>
     </ion-pane>
   </body>

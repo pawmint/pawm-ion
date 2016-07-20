@@ -84,6 +84,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
         $ionicPopup.alert({title: res.data.message});
       });
   };
+  $scope.suggest = function() {SystemInfo.status='suggest'};
   $scope.showLogin = function() {
     var login = {username: 'username', password: 'password'}
     $scope.login = login;
@@ -122,4 +123,16 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     });
   }
   };
-});
+})
+.controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
+  $scope.SystemInfo = SystemInfo;
+  $scope.suggestions = [
+    {text: "SAC?"},
+    {text: "Go for a walk?"},
+    {text: "Cook?"},
+    {text: "Drink some water?"},
+    {text: "Nothing"},
+  ];
+
+}])
+;
