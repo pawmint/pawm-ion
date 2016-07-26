@@ -122,21 +122,6 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     });
   };
 }])
-.directive('textarea', function() {
-  return {
-  restrict: 'E',
-  link: function(scope, element, attr){
-    var update = function(){
-      element.css("height", "auto");
-      var height = element[0].scrollHeight;
-      element.css("height", element[0].scrollHeight + "px");
-    };
-    scope.$watch(attr.ngModel, function(){
-      update();
-    });
-  }
-  };
-})
 .controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
   $scope.suggestions = [
