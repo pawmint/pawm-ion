@@ -76,6 +76,10 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
 .factory('SystemInfo', function() {
   var SystemInfo = {
     deviceToken: '',
+    isLoggedIn: function() {
+      // User is considered to be logged if in possession of an authToken
+      return !!localStorage.authToken;
+    }
   };
   return SystemInfo;
 })
@@ -98,6 +102,13 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     // TODO: Verify the localStorage.authToken is VALID!
     SystemInfo.status='ubismart';
   };
+  $scope.loggingInOut = function() {
+    if (!SystemInfo.isLoggedIn()) {
+      $scope.showLogin();
+    } else {
+      $scope.performLogout();
+    }
+  }
   $scope.showLogin = function() {
     var login = {username: 'username', password: 'password'}
     $scope.login = login;
@@ -121,6 +132,10 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
       };
     });
   };
+  $scope.performLogout = function() {
+    delete localStorage.removeItem('authToken');
+    AuthenticationService.logout(SystemInfo.deviceToken);
+  };
 }])
 .controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
@@ -138,7 +153,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
 
   $scope.openInExternalBrowser = function() {
     // Open in external browser
-    window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
+    $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
 
   $scope.authUbiWeb = function() {
