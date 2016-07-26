@@ -85,7 +85,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
 })
 
 // The basic controller
-.controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
+.controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$window', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $window) {
   $scope.SystemInfo = SystemInfo;
   $scope.showToken = function() {alert(SystemInfo.deviceToken)}
   $scope.showAuthToken = function() {$ionicPopup.alert({title: "AuthToken", template: localStorage.authToken})}
@@ -98,9 +98,9 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
   $scope.suggest = function() {SystemInfo.status='suggest'};
 
   // Show UbiSMART interface view of My Services
-  $scope.ubiStart = function() {
+  $scope.startUbiSmartWeb = function() {
     // TODO: Verify the localStorage.authToken is VALID!
-    SystemInfo.status='ubismart';
+    $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
   $scope.loggingInOut = function() {
     if (!SystemInfo.isLoggedIn()) {
@@ -146,21 +146,5 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     {text: "Drink some water?"},
     {text: "Nothing"},
     ];
-}])
-.controller("UbiWebController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$window', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $window) {
-  $scope.SystemInfo = SystemInfo;
-  if (!$scope.SystemInfo.authToken) $scope.SystemInfo.authToken = localStorage.authToken;
-
-  $scope.openInExternalBrowser = function() {
-    // Open in external browser
-    $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
-  };
-
-  $scope.authUbiWeb = function() {
-    // Open in inAppBroser
-    var w = $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken), 'theUbiSmartWindow');
-    console.log(w);
-  };
-
 }])
 ;

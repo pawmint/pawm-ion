@@ -47,7 +47,7 @@
           <div class="col text-center">
             <button class="button button-balanced" ng-click="loggingInOut()" ng-bind="SystemInfo.isLoggedIn()?'Logout':'Login'"></button>
             <button class="button button-royal" ng-click="suggest()">Suggest</button>
-            <button class="button button-positive" ng-click="ubiStart()">UbiSMART</button>
+            <button class="button button-positive" ng-click="startUbiSmartWeb()">UbiSMART</button>
           </div>
         </div>
         <div class="row">
@@ -61,27 +61,6 @@
           &lt; Back</button>
 
         <ng-include src="'templates/suggestion_form.html'"></ng-include>
-      </ion-content>
-      <ion-content ng-controller="UbiWebController" ng-show="SystemInfo.status=='ubismart'">
-        <button class="button button-royal" ng-click="SystemInfo.status=undefined">
-          &lt; Back</button>
-        <!--
-        <form method="POST" action="https://martin.ubismart.org/service/appBroker"  target="_system">
-          <input name="authToken" value="{{SystemInfo.authToken}}" type="nonhidden" />
-          <input name="action" value="authByToken" type="nonhidden" />
-          <input type="submit" class="button button-positive button-block" value="Submit the form" />
-        </form>
-        -->
-        <button class="button button-assertive button-block" ng-click="openInExternalBrowser()">Open UbiSmart</button>
-        <button class="button button-assertive button-block" ng-click="authUbiWeb()">Use authToken to login</button>
-        <!--
-        <a class="button button-energized button-block" href="https://martin.ubismart.org/service/appBroker?action=authByToken&authToken={{localStorage.authToken}}">a href</a>
-        <iframe name="ubismartFrame"></iframe>
-        <form method="POST" action="https://martin.ubismart.org/myservices">
-          <input type="submit" class="button button-positive button-block" value="Submit the form" />
-        <a class="button button-energized button-block" onclick="window.open('http://apache.org', '_blank', 'location=yes');">open a website</a>
-        </form>
-        -->
       </ion-content>
     </ion-pane>
   </body>
