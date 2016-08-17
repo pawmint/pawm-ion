@@ -1,8 +1,6 @@
-// Ionic PAWM App
-
 var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubismart'])
 
-.run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', '$rootScope', function($ionicPlatform, $ionicPopup, SystemInfo, $rootScope) {
+.run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$rootScope', function($ionicPlatform, $ionicPopup, SystemInfo, AuthenticationService, CommunicatorService, $rootScope) {
   $ionicPlatform.ready(function() {
 
     var register = function(){
@@ -28,6 +26,8 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
         // curl -X POST -H "Authorization: Bearer <ionic-app-id>" -H "Content-Type: application/json" -d '{"tokens": ["<device-id>"],"profile": "testing","notification": {"message": "Please, open the app.", "payload":{"text":"Hello"}} }' "https://api.ionic.io/push/notifications"
 
       });
+
+
 
       // Undocumented feature?
       push.errorCallback = function(e) {
@@ -55,6 +55,43 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
       });
     };
     register();
+
+    $scope=$rootScope;
+
+    $rootScope.loggingInOut = function() {
+    if (!SystemInfo.isLoggedIn()) {
+      $scope.showLogin();
+    } else {
+      $scope.performLogout();
+    }
+  };
+  $rootScope.showLogin = function() {
+    var login = {username: 'username', password: 'password'}
+    $scope.login = login;
+    $ionicPopup.confirm({
+      title: 'Authenticate',
+      templateUrl: 'templates/login_form.html',
+      scope: $scope,
+      cancelText: 'Exit',
+      cancelType: 'button-assertive'
+    }).then(function(confirmation){
+      if (confirmation) {
+        AuthenticationService.login($scope.login.username, $scope.login.password, SystemInfo.deviceToken)
+        .then(function(res){
+          // Save the token for further requests
+          localStorage.authToken = res.data.authToken;
+          console.log(res);
+          $ionicPopup.alert({title: res.data.message});
+        });
+      } else {
+          ionic.Platform.exitApp();
+      };
+    });
+  };
+  $rootScope.performLogout = function() {
+    delete localStorage.removeItem('authToken');
+    AuthenticationService.logout(SystemInfo.deviceToken);
+  };
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -85,6 +122,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
 })
 
 // The basic controller
+
 .controller("basicView", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$window', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $window) {
   $scope.SystemInfo = SystemInfo;
   $scope.showToken = function() {alert(SystemInfo.deviceToken)}
@@ -100,42 +138,9 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
   // Show UbiSMART interface view of My Services
   $scope.startUbiSmartWeb = function() {
     // TODO: Verify the localStorage.authToken is VALID!
-    $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
+    $window.open('https://touch-sg.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
-  $scope.loggingInOut = function() {
-    if (!SystemInfo.isLoggedIn()) {
-      $scope.showLogin();
-    } else {
-      $scope.performLogout();
-    }
-  }
-  $scope.showLogin = function() {
-    var login = {username: 'username', password: 'password'}
-    $scope.login = login;
-    $ionicPopup.confirm({
-      title: 'Authenticate',
-      templateUrl: 'templates/login_form.html',
-      scope: $scope,
-      cancelText: 'Exit',
-      cancelType: 'button-assertive'
-    }).then(function(confirmation){
-      if (confirmation) {
-        AuthenticationService.login($scope.login.username, $scope.login.password, SystemInfo.deviceToken)
-        .then(function(res){
-          // Save the token for further requests
-          localStorage.authToken = res.data.authToken;
-          console.log(res);
-          $ionicPopup.alert({title: res.data.message});
-        });
-      } else {
-          ionic.Platform.exitApp();
-      };
-    });
-  };
-  $scope.performLogout = function() {
-    delete localStorage.removeItem('authToken');
-    AuthenticationService.logout(SystemInfo.deviceToken);
-  };
+  
 }])
 .controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
