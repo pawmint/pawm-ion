@@ -100,7 +100,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
   // Show UbiSMART interface view of My Services
   $scope.startUbiSmartWeb = function() {
     // TODO: Verify the localStorage.authToken is VALID!
-    $window.open('https://martin.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
+    $window.open('https://touch-sg.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
   $scope.loggingInOut = function() {
     if (!SystemInfo.isLoggedIn()) {
