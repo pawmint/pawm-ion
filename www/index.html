@@ -55,6 +55,11 @@
             <a class="button button-icon icon ion-happy-outline huge-icon" ng-click="sendEvent('happy')"></a>
           </div>
         </div>
+        <div class="row">
+          <div class="col text-center">
+            <a class="button button-icon icon ion-sad-outline large-icon" ng-click="sendEvent('soso')"></a>
+          </div>
+        </div>
       </ion-content>
       <ion-content ng-controller="suggestController" ng-show="SystemInfo.status=='suggest'">
         <button class="button button-royal" ng-click="SystemInfo.status=undefined">
