@@ -16,6 +16,12 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
               SystemInfo.status = 'suggest';
             });
           }
+          if (payload.type == 'survey') {
+            // $apply is needed: in case of app in foreground
+            $rootScope.$apply(function(){
+              SystemInfo.status = 'survey';
+            });
+          }
         },
         "pluginConfig": {
           "android": {
@@ -151,5 +157,14 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     {text: "Drink some water?"},
     {text: "Nothing"},
     ];
-}])
+  }])
+.controller("surveyController", ['$scope', 'SystemInfo', '$ionicPopup', function($scope, SystemInfo, $ionicPopup) {
+  $scope.SystemInfo = SystemInfo;
+  $scope.ask = function() {
+    $ionicPopup.alert("Please, help us by answering some questions.");
+  };
+  $scope.back = function() {
+    SystemInfo.status = undefined;
+  };
+  }])
 ;

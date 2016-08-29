@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -33,12 +33,13 @@
   </head>
   <body ng-app="pawm">
 
-    <ion-pane>
+    <ion-pane ng-controller="basicView">
       <ion-header-bar class="bar-stable">
         <h1 class="title">PAWM Resident</h1>
-        <button class="button button-balanced" ng-click="loggingInOut()" ng-bind="SystemInfo.isLoggedIn()?'Logout':'Login'"></button>
+        <button class="button button-balanced" ng-click="loggingInOut()" ng-bind="SystemInfo.isLoggedIn()?'Logout':'Login'" ng-hide="SystemInfo.isLoggedIn()"></button>
+        <button class="button button-assertive" ng-click="SystemInfo.status=(SystemInfo.status=='survey'?undefined:'survey')" ng-bind="SystemInfo.status=='survey'?'×':'Survey'"></button>
       </ion-header-bar>
-      <ion-content ng-controller="basicView" ng-show="!SystemInfo.status">
+      <ion-content ng-show="!SystemInfo.status">
         <div class="row">
           <div class="col text-center">
             <ion-spinner ng-if="!SystemInfo.registrationEnded"></ion-spinner>
@@ -67,6 +68,13 @@
           &lt; Back</button>
 
         <ng-include src="'templates/suggestion_form.html'"></ng-include>
+      </ion-content>
+      <ion-content ng-controller="surveyController" ng-show="SystemInfo.status=='survey'">
+        <div class="row">
+          <div class="col text-center">
+            <iframe src="https://qlite.az1.qualtrics.com/SE?Q_DL=9Hy17v81x8JpDtb_56dB4S6sMAy1wCF_MLRP_3WZVhDt5V8s9nRb&Q_CHL=gl" width="100%" height="450" frameborder="yes" style="border:1" ng-show="SystemInfo.status=='survey'"></iframe>
+          </div>
+        </div>
       </ion-content>
     </ion-pane>
   </body>
