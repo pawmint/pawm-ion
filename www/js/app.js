@@ -1,6 +1,6 @@
 var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubismart'])
 
-.run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$rootScope', function($ionicPlatform, $ionicPopup, SystemInfo, AuthenticationService, CommunicatorService, $rootScope) {
+.run(['$ionicPlatform', '$ionicPopup', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$rootScope', '$window', function($ionicPlatform, $ionicPopup, SystemInfo, AuthenticationService, CommunicatorService, $rootScope, $window) {
   $ionicPlatform.ready(function() {
 
     var register = function(){
@@ -17,10 +17,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
             });
           }
           if (payload.type == 'survey') {
-            // $apply is needed: in case of app in foreground
-            $rootScope.$apply(function(){
-              SystemInfo.status = 'survey';
-            });
+            $rootScope.startSurvey();
           }
         },
         "pluginConfig": {
@@ -99,6 +96,12 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     AuthenticationService.logout(SystemInfo.deviceToken);
   };
 
+  // Show Resident survey
+  $rootScope.startSurvey = function() {
+    $window.open('https://qlite.az1.qualtrics.com/SE?Q_DL=9Hy17v81x8JpDtb_56dB4S6sMAy1wCF_MLRP_3WZVhDt5V8s9nRb&Q_CHL=gl','_system','location=no');
+  };
+
+
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -146,7 +149,6 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     // TODO: Verify the localStorage.authToken is VALID!
     $window.open('https://touch-sg.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
-  
 }])
 .controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;

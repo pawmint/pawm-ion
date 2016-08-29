@@ -37,7 +37,7 @@
       <ion-header-bar class="bar-stable">
         <h1 class="title">PAWM Resident</h1>
         <button class="button button-balanced" ng-click="loggingInOut()" ng-bind="SystemInfo.isLoggedIn()?'Logout':'Login'" ng-hide="SystemInfo.isLoggedIn()"></button>
-        <button class="button button-assertive" ng-click="SystemInfo.status=(SystemInfo.status=='survey'?undefined:'survey')" ng-bind="SystemInfo.status=='survey'?'×':'Survey'"></button>
+        <button class="button button-assertive" ng-click="startSurvey()" ng-bind="SystemInfo.status=='survey'?'×':'Survey'"></button>
       </ion-header-bar>
       <ion-content ng-show="!SystemInfo.status">
         <div class="row">
@@ -72,7 +72,7 @@
       <ion-content ng-controller="surveyController" ng-show="SystemInfo.status=='survey'">
         <div class="row">
           <div class="col text-center">
-            <iframe src="https://qlite.az1.qualtrics.com/SE?Q_DL=9Hy17v81x8JpDtb_56dB4S6sMAy1wCF_MLRP_3WZVhDt5V8s9nRb&Q_CHL=gl" width="100%" height="450" frameborder="yes" style="border:1" ng-show="SystemInfo.status=='survey'"></iframe>
+            <iframe src="https://qlite.az1.qualtrics.com/SE?Q_DL=9Hy17v81x8JpDtb_56dB4S6sMAy1wCF_MLRP_3WZVhDt5V8s9nRb&Q_CHL=gl" width="100%" height="450" frameborder="yes" style="border:1" ng-show="SystemInfo.status=='survey'" data-tap-disabled="true"></iframe>
           </div>
         </div>
       </ion-content>
