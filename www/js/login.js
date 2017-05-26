@@ -12,7 +12,7 @@ var login = angular.module('login_Ubismart', [])
       form.append('password', password);
       form.append('regId', device);
 
-      var res = $http.post('https://touch-sg.ubismart.org/service/appBroker', form, {
+      var res = $http.post('https://deployment-sg.ubismart.org/service/appBroker', form, {
         headers: {
           'Content-Type': undefined
         } // undefined => Content-Type will be set automatically to 'multipart/form-data' and will fill correctly the boundary parameter
@@ -31,7 +31,7 @@ var login = angular.module('login_Ubismart', [])
       form.append('action', 'logout');
       form.append('regId', device);
 
-      var res = $http.post('https://touch-sg.ubismart.org/service/appBroker', form, {
+      var res = $http.post('https://deployment-sg.ubismart.org/service/appBroker', form, {
         headers: {
           'Content-Type': undefined
         } // undefined => Content-Type will be set automatically to 'multipart/form-data' and will fill correctly the boundary parameter

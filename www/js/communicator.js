@@ -8,7 +8,7 @@ var login = angular.module('communicator_Ubismart', [])
       form.append('eventType', type);
       form.append('authToken', localStorage.authToken);
 
-      var res = $http.post('https://touch-sg.ubismart.org/service/appBroker', form, {
+      var res = $http.post('https://demo.ubismart.org/service/appBroker', form, {
         headers: {
           'Content-Type': undefined
         } // undefined => Content-Type will be set automatically to 'multipart/form-data' and will fill correctly the boundary parameter
