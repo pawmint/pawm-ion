@@ -35,9 +35,9 @@
 
     <ion-pane ng-controller="basicView">
       <ion-header-bar class="bar-stable">
-        <h1 class="title">PAWM Resident</h1>
+        <h1 class="title">UbiSmart</h1>
         <button class="button button-balanced" ng-click="loggingInOut()" ng-bind="SystemInfo.isLoggedIn()?'Logout':'Login'" ng-hide="SystemInfo.isLoggedIn()"></button>
-        <button class="button button-assertive" ng-click="startSurvey()" ng-bind="SystemInfo.status=='survey'?'×':'Survey'"></button>
+        <button class="button button-assertive" style="display:none" ng-click="startSurvey()" ng-bind="SystemInfo.status=='survey'?'×':'Survey'"></button>
       </ion-header-bar>
       <ion-content ng-show="!SystemInfo.status">
         <div class="row">
