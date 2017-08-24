@@ -10,10 +10,10 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
         "onNotification": function(notification) {
           var payload = notification.payload;
           //$ionicPopup.alert({title: payload.text});
-          if (payload.type == 'suggest') {
+          if (payload.type == 'ask') {
             // $apply is needed: in case of app in foreground
             $rootScope.$apply(function(){
-              SystemInfo.status = 'suggest';
+              SystemInfo.status = 'ask';
             });
           }
           if (payload.type == 'survey') {
@@ -141,8 +141,8 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
         $ionicPopup.alert({title: res.data.message});
       });
   };
-  // Suggestions form (open on notification arriving)
-  $scope.suggest = function() {SystemInfo.status='suggest'};
+  // Ask options form (open on notification arriving)
+  $scope.ask = function() {SystemInfo.status='ask'};
 
   // Show UbiSMART interface view of My Services
   $scope.startUbiSmartWeb = function() {
@@ -150,17 +150,17 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     $window.open('https://icost.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
 }])
-.controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$timeout', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $timeout) {
+.controller("askController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$timeout', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $timeout) {
   $scope.SystemInfo = SystemInfo;
-  $scope.suggestions = [
+  $scope.options = [
     {text: "Going to work", value: "work"},
     {text: "Get some leisure", value: "leisure"},
     {text: "Go for a walk", value: "walk"},
     {text: "None of your business", value: "none"}
     ];
-  $scope.feedback = function(suggestion) {
-    var infoDialog = $ionicPopup.alert({title:"Selected: '" + suggestion.value + "'", buttons: []});
-    CommunicatorService.event(suggestion.value);
+  $scope.feedback = function(option) {
+    var infoDialog = $ionicPopup.alert({title:"Selected: '" + option.value + "'", buttons: []});
+    CommunicatorService.event(option.value);
     $timeout(function() {
       infoDialog.close(); //close the popup after a short while
     }, 1000);

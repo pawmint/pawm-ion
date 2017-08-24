@@ -48,7 +48,7 @@
         <!-- <div class="row"> -->
           <!-- <div class="col text-center"> -->
             <!-- <button class="button button-balanced" ng-click="loggingInOut()" ng-bind="SystemInfo.isLoggedIn()?'Logout':'Login'"></button> -->
-            <!-- <button class="button button-royal" ng-click="suggest()">Suggest</button> -->
+            <!-- <button class="button button-royal" ng-click="ask()">Ask</button> -->
             <!-- <button class="button button-positive" ng-click="startUbiSmartWeb()">UbiSMART</button> -->
           <!-- </div> -->
         <!-- </div> -->
@@ -63,11 +63,11 @@
           </div>
         </div>
       </ion-content>
-      <ion-content ng-controller="suggestController" ng-show="SystemInfo.status=='suggest'">
+      <ion-content ng-controller="askController" ng-show="SystemInfo.status=='ask'">
         <!--<button class="button button-royal" ng-click="SystemInfo.status=undefined">
           &lt; Back</button>-->
 
-        <ng-include src="'templates/suggestion_form.html'"></ng-include>
+        <ng-include src="'templates/ask_form.html'"></ng-include>
       </ion-content>
       <ion-content ng-controller="surveyController" ng-show="SystemInfo.status=='survey'">
         <div class="row">
