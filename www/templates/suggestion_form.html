@@ -1,7 +1,7 @@
 <div>
 <h2>What would you like to do?</h2>
 <div class="list padding">
-<button class="item button button-positive button-block " ng-repeat="suggestion in suggestions">
+<button class="item button button-positive button-block " ng-repeat="suggestion in suggestions" ng-click="feedback(suggestion)">
 {{suggestion.text}}
 </button>
 </div>

@@ -150,15 +150,22 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     $window.open('https://icost.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
 }])
-.controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup) {
+.controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$timeout', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $timeout) {
   $scope.SystemInfo = SystemInfo;
   $scope.suggestions = [
-    {text: "SAC?"},
-    {text: "Go for a walk?"},
-    {text: "Cook?"},
-    {text: "Drink some water?"},
-    {text: "Nothing"},
+    {text: "Going to work", value: "work"},
+    {text: "Get some leisure", value: "leisure"},
+    {text: "Go for a walk", value: "walk"},
+    {text: "None of your business", value: "none"}
     ];
+  $scope.feedback = function(suggestion) {
+    var infoDialog = $ionicPopup.alert({title:"Selected: '" + suggestion.value + "'", buttons: []});
+    CommunicatorService.event(suggestion.value);
+    $timeout(function() {
+      infoDialog.close(); //close the popup after a short while
+    }, 1000);
+
+  };
   }])
 .controller("surveyController", ['$scope', 'SystemInfo', '$ionicPopup', function($scope, SystemInfo, $ionicPopup) {
   $scope.SystemInfo = SystemInfo;
