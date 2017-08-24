@@ -166,14 +166,5 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     }, 1000);
 
   };
-  }])
-.controller("surveyController", ['$scope', 'SystemInfo', '$ionicPopup', function($scope, SystemInfo, $ionicPopup) {
-  $scope.SystemInfo = SystemInfo;
-  $scope.ask = function() {
-    $ionicPopup.alert("Please, help us by answering some questions.");
-  };
-  $scope.back = function() {
-    SystemInfo.status = undefined;
-  };
-  }])
+}])
 ;
