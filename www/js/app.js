@@ -16,6 +16,13 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
               SystemInfo.status = 'ask';
             });
           }
+          else if (payload.type == 'suggest') {
+            // $apply is needed: in case of app in foreground
+            $rootScope.$apply(function(){
+              SystemInfo.suggestions = payload.suggestions;
+              SystemInfo.status = 'suggest';
+            });
+          }
           if (payload.type == 'survey') {
             $rootScope.startSurvey();
           }
@@ -143,6 +150,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
   };
   // Ask options form (open on notification arriving)
   $scope.ask = function() {SystemInfo.status='ask'};
+  $scope.suggest = function() {SystemInfo.status='suggest'};
 
   // Show UbiSMART interface view of My Services
   $scope.startUbiSmartWeb = function() {
@@ -150,7 +158,7 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     $window.open('https://icost.ubismart.org/service/appBroker?action=authByToken&authToken=' + encodeURIComponent(localStorage.authToken),'_system','location=no');
   };
 }])
-.controller("askController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$timeout', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $timeout) {
+.controller("askController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$timeout', '$rootScope', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $timeout, $rootScope) {
   $scope.SystemInfo = SystemInfo;
   $scope.options = [
     {text: "Going to work", value: "work"},
@@ -159,12 +167,56 @@ var app = angular.module('pawm', ['ionic', 'login_Ubismart', 'communicator_Ubism
     {text: "None of your business", value: "none"}
     ];
   $scope.feedback = function(option) {
-    var infoDialog = $ionicPopup.alert({title:"Selected: '" + option.value + "'", buttons: []});
-    CommunicatorService.event(option.value);
-    $timeout(function() {
-      infoDialog.close(); //close the popup after a short while
-    }, 1000);
+  var infoDialog = $ionicPopup.alert({title:"Selected: '" + option.value + "'", buttons: []});
+  $timeout(function() {
+    infoDialog.close(); //close the popup after a short while
+  }, 1000);
+  CommunicatorService.event(option.value)
+  .then(function(res){
+    // $apply is needed: in case of app in foreground
+    console.log("res", res)
+    SystemInfo.suggestions = function(data) {
+      var result = {};
+      // Add sleep data
+      result.sleep = data.sleep;
+      result.sleep.sleptWell = ('true' == data.sleep.sleptWell[0]);
+      console.log("sleptWell:", result.sleep.sleptWell);
+
+      // Transform weather: [{weather: 'text'}, {weather: 'text2}] to ['text', 'text2']
+      result.weather = [];
+      angular.forEach(data.weather, function(item, key) {
+        result.weather.push(item.weather);
+      });
+
+      // Transform Uris into words
+      result.mobility = [];
+      angular.forEach(data.mobility, function(item, key) {
+        result.mobility.push(item.mobilityUri.split(':')[1].replace(/[A-Z][a-z]/g, ' $&').replace(/^ /,''));
+      });
+
+      console.log("RESULT", result);
+      return result;
+      
+    }(res.data);
+      SystemInfo.status = 'suggest';
+  });
+  //$ionicPopup.alert({title:"Something went wrong", template: JSON.stringify(response.err)});
+  //else {
+
+  //}
+  };
+  }])
+.controller("suggestController", ['$scope', 'SystemInfo', 'AuthenticationService', 'CommunicatorService', '$ionicPopup', '$timeout', function($scope, SystemInfo, AuthenticationService, CommunicatorService, $ionicPopup, $timeout) {
+  $scope.SystemInfo = SystemInfo;
+  $scope.suggestions = function() { return SystemInfo.suggestions };
+
+  $scope.feedback = function(option) {
+  var infoDialog = $ionicPopup.alert({title:"Selected: '" + option.value + "'", buttons: []});
+  CommunicatorService.event(option.value);
+  $timeout(function() {
+    infoDialog.close(); //close the popup after a short while
+  }, 1000);
 
   };
-}])
+  }])
 ;

@@ -64,9 +64,15 @@
       </ion-content>
       <ion-content ng-controller="askController" ng-show="SystemInfo.status=='ask'">
         <!--<button class="button button-royal" ng-click="SystemInfo.status=undefined">
-          &lt; Back</button>-->
+         &lt; Back</button>-->
 
         <ng-include src="'templates/ask_form.html'"></ng-include>
+      </ion-content>
+      <ion-content ng-controller="suggestController" ng-show="SystemInfo.status=='suggest'">
+        <!--<button class="button button-royal" ng-click="SystemInfo.status=undefined">
+         &lt; Back</button>-->
+
+        <ng-include src="'templates/suggest_form.html'"></ng-include>
       </ion-content>
     </ion-pane>
   </body>

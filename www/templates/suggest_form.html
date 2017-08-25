@@ -1,0 +1,11 @@
+<div>
+  <div class="padding">
+    <h2>Suggestion</h2>
+    <p>
+    The weather is {{suggestions().weather.join(', ')}}
+    <p>
+    and you had {{suggestions().sleep.sleptWell?'good':'bad'}} sleep
+    <p>
+    what about <span ng-repeat="suggestion in suggestions().mobility">{{suggestion}}{{$last ? '' : ($index==suggestions().mobility.length-2) ? ' or ' : ', '}}</span>?
+  </div>
+</div>
